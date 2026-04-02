@@ -67,26 +67,32 @@ def list_items():
 def create_item():
     try:
         data = request.get_json()
-
         if not data or 'name' not in data:
             return jsonify({'error': 'name field is required'}), 400
-
         if 'description' not in data:
             return jsonify({'error': 'description field is required'}), 400
-
         item_id = str(uuid.uuid4())
         items_db[item_id] = {
             'name': data['name'],
             'description': data['description'],
             'created_at': datetime.utcnow().isoformat()
         }
-
         logger.info(f"Created item {item_id}: {data['name']}")
         return jsonify({'id': item_id, **items_db[item_id]}), 201
-
     except Exception as e:
         logger.error(f"Error creating item: {str(e)}")
         return jsonify({'error': 'Failed to create item'}), 500
+
+
+@app.route('/items/<item_id>', methods=['GET'])
+def get_item(item_id):
+    try:
+        if item_id not in items_db:
+            return jsonify({'error': 'Item not found'}), 404
+        return jsonify({'id': item_id, **items_db[item_id]}), 200
+    except Exception as e:
+        logger.error(f"Error getting item {item_id}: {str(e)}")
+        return jsonify({'error': 'Failed to get item'}), 500
 
 
 @app.route('/items/<item_id>', methods=['DELETE'])
@@ -94,7 +100,6 @@ def delete_item(item_id):
     try:
         if item_id not in items_db:
             return jsonify({'error': 'Item not found'}), 404
-
         item_name = items_db[item_id]['name']
         del items_db[item_id]
         logger.info(f"Deleted item {item_id}: {item_name}")
