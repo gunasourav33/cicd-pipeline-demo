@@ -1,5 +1,7 @@
 # CI/CD Pipeline Demo
 
+![CI](https://github.com/gunasourav33/cicd-pipeline-demo/actions/workflows/ci.yml/badge.svg) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Python](https://img.shields.io/badge/python-3.11-blue.svg) ![Docker](https://img.shields.io/badge/docker-enabled-blue.svg)
+
 A straightforward Flask REST API with a complete CI/CD pipeline using GitHub Actions. Good for understanding the basic flow: lint → test → docker build → registry push → deploy.
 
 ## What's in here
